@@ -7,7 +7,9 @@ ips.txt
 open_port.xlsx
 # C extensions
 *.so
-
+*.nmap
+*.xlsx
+*.txt
 # Distribution / packaging
 .Python
 build/

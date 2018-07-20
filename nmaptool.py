@@ -12,7 +12,9 @@ def do_scan(targets, options):
     if rc != 0:
         print("nmap scan failed: {0}".format(nmproc.stderr))
     print(type(nmproc.stdout))
-
+    file = open('current_ips.nmap','w')
+    file.write(nmproc.stdout)
+    file.close()
     try:
         parsed = NmapParser.parse(nmproc.stdout)
     except NmapParserException as e:
@@ -23,13 +25,7 @@ def do_scan(targets, options):
 
 # print scan results from a nmap report
 def print_scan(nmap_report):
-    print("Starting Nmap {0} ( http://nmap.org ) at {1}".format(
-        nmap_report.version,
-        nmap_report.started))
-	
-    wb = openpyxl.Workbook()
-    wb.save('open_port.xlsx')
-    sheet = wb.get_active_sheet()
+    print("Starting Nmap {0} ( http://nmap.org ) at {1}".format( nmap_report.version, nmap_report.started ))
 	
     for host in nmap_report.hosts:
         if len(host.hostnames):
@@ -37,18 +33,12 @@ def print_scan(nmap_report):
         else:
             tmp_host = host.address
 
-        print("Nmap scan report for {0} ({1})".format(
-            tmp_host,
-            host.address))
+        print("Nmap scan report for {0} ({1})".format( tmp_host, host.address))
         print("Host is {0}.".format(host.status))
         print("  PORT     STATE         SERVICE")
 
         for serv in host.services:
-            pserv = "{0:>5s}/{1:3s}  {2:12s}  {3}".format(
-                    str(serv.port),
-                    serv.protocol,
-                    serv.state,
-                    serv.service)
+            pserv = "{0:>5s}/{1:3s}  {2:12s}  {3}".format( str(serv.port),serv.protocol,serv.state,serv.service)
             if len(serv.banner):
                 pserv += " ({0})".format(serv.banner)
             print(pserv)
