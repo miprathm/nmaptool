@@ -29,9 +29,31 @@ def do_scan(targets, options):
 # print scan results from a nmap report
 def print_scan(nmap_report):
     print("Starting Nmap {0} ( http://nmap.org ) at {1}".format( nmap_report.version, nmap_report.started ))
-	
+    document = Document()
+    document.add_heading('Nmap Scan', 0)	
+
+    no_of_hosts = len(nmap_report.hosts)
+
+    table = document.add_table(rows=1, cols=3)
+    hdr_cells = table.rows[0].cells
+    hdr_cells[0].text = 'ips'
+    hdr_cells[1].text = 'Ports'
+    hdr_cells[2].text = 'Services'
+
     for host in nmap_report.hosts:
-        if len(host.hostnames):
+        row_cells = table.add_row().cells
+        #ip
+        row_cells[0].text = host.address
+        string_port = ''
+        string_service = ''
+        for serv in host.services:
+            string_port += str(serv.port) + "\n"
+            string_service += serv.service + "\n"
+        #Ports
+        row_cells[1].text = string_port
+        #Services
+        row_cells[2].text = string_service
+        """if len(host.hostnames):
             tmp_host = host.hostnames.pop()
         else:
             tmp_host = host.address
@@ -45,6 +67,9 @@ def print_scan(nmap_report):
             if len(serv.banner):
                 pserv += " ({0})".format(serv.banner)
             print(pserv)
+        """   
+    document.add_page_break()
+    document.save('output.docx')
     print(nmap_report.summary)
 
 
@@ -64,7 +89,7 @@ if __name__ == "__main__":
     ''',re.X)
 
     ips = ip_finder.findall(all_ips)
-    report = do_scan(ips, "-sV")
+    report = do_scan(ips, "-Pn -T4 -v")
     
     #report = do_scan("127.0.0.1", "-sV")
     if report :

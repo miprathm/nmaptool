@@ -10,6 +10,7 @@ open_port.xlsx
 *.nmap
 *.xlsx
 *.txt
+*.docx
 # Distribution / packaging
 .Python
 build/
