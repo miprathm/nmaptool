@@ -6,6 +6,7 @@ import openpyxl
 from docx import Document
 from docx.shared import Inches
 
+output_name = "output"
 
 # start a new nmap scan on localhost with some specific options
 def do_scan(targets, options):
@@ -15,7 +16,7 @@ def do_scan(targets, options):
     if rc != 0:
         print("nmap scan failed: {0}".format(nmproc.stderr))
     print(type(nmproc.stdout))
-    file = open('current_ips.nmap','w')
+    file = open(output_name+'.nmap','w')
     file.write(nmproc.stdout)
     file.close()
     try:
@@ -35,6 +36,7 @@ def print_scan(nmap_report):
     no_of_hosts = len(nmap_report.hosts)
 
     table = document.add_table(rows=1, cols=3)
+    table.style = 'TableGrid'
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = 'ips'
     hdr_cells[1].text = 'Ports'
@@ -49,6 +51,8 @@ def print_scan(nmap_report):
         for serv in host.services:
             string_port += str(serv.port) + "\n"
             string_service += serv.service + "\n"
+        string_port = string_port.strip()
+        string_service = string_service.strip()
         #Ports
         row_cells[1].text = string_port
         #Services
@@ -69,7 +73,7 @@ def print_scan(nmap_report):
             print(pserv)
         """   
     document.add_page_break()
-    document.save('output.docx')
+    document.save(output_name+'.docx')
     print(nmap_report.summary)
 
 
@@ -79,6 +83,9 @@ if __name__ == "__main__":
     if len(sys.argv) > 1 :
         pathname = os.path.abspath(sys.argv[1])
     print(pathname)
+
+    if len(sys.argv)> 2:
+        output_name =  sys.argv[2]
 
     all_ips_file = open(pathname,'r')
 
