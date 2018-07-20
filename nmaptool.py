@@ -3,6 +3,9 @@ from libnmap.parser import NmapParser, NmapParserException
 import sys, os
 import re
 import openpyxl
+from docx import Document
+from docx.shared import Inches
+
 
 # start a new nmap scan on localhost with some specific options
 def do_scan(targets, options):
