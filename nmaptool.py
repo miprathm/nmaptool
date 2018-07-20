@@ -27,9 +27,9 @@ def print_scan(nmap_report):
         nmap_report.version,
         nmap_report.started))
 	
-	wb = openpyxl.Workbook()
-	wb.save('open_port.xlsx')
-	sheet = wb.get_active_sheet()
+    wb = openpyxl.Workbook()
+    wb.save('open_port.xlsx')
+    sheet = wb.get_active_sheet()
 	
     for host in nmap_report.hosts:
         if len(host.hostnames):
