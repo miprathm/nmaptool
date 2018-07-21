@@ -11,6 +11,7 @@ open_port.xlsx
 *.xlsx
 *.txt
 *.docx
+*.xml
 # Distribution / packaging
 .Python
 build/
