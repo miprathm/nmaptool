@@ -2,7 +2,6 @@ from libnmap.process import NmapProcess
 from libnmap.parser import NmapParser, NmapParserException
 import sys, os
 import re
-import openpyxl
 from docx import Document
 from docx.shared import Inches
 from time import sleep
@@ -18,8 +17,6 @@ def do_scan(targets, options):
     while nmproc.is_running():
         print("Nmap Scan running: ETC: {0} DONE: {1}%".format(nmproc.etc,nmproc.progress))
         sleep(2)
-    if rc != 0:
-        print("nmap scan failed: {0}".format(nmproc.stderr))
     #print(type(nmproc.stdout))
     file = open(output_name+'.xml','w')
     file.write(nmproc.stdout)
